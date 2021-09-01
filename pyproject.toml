@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "saucenaopie"
-version = "1.0.0"
+version = "1.0.1"
 description = "Modern and easy-to-use Python implementation for the SauceNao API, with Pydantic and full asyncio support."
 authors = ["WhiteMemory99 <lisen1510@gmail.com>"]
 license = "MIT"

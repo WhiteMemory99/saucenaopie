@@ -1,6 +1,6 @@
 # SauceNaoPie
 
-[![GitHub](https://img.shields.io/github/license/WhiteMemory99/saucenaopie)](https://github.com/WhiteMemory99/saucenaopie/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/WhiteMemory99/saucenaopie)](https://github.com/WhiteMemory99/saucenaopie/blob/main/LICENSE)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/saucenaopie)](https://pypi.org/project/saucenaopie/)
 
 Modern and easy-to-use Python implementation for the **SauceNao API**, with Pydantic and full asyncio support, inspired
@@ -36,7 +36,7 @@ Even so, I tried to make this wrapper as user-friendly as I could. As for benefi
 * The SauceNao DB indexes are fully represented in this library as a helpful object. Thanks to that, you can see, get,
   and use any SauceNao index with ease, and do stuff like getting the index name by its ID, getting indexes by a certain
   result type or all the available indexes altogether. Read more
-  in [the sources](https://github.com/WhiteMemory99/saucenaopie/tree/master/saucenaopie/helper.py).
+  in [the sources](https://github.com/WhiteMemory99/saucenaopie/tree/main/saucenaopie/helper.py).
 
 ## Writing your first code
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 </details>
 
 To learn more, you can either scroll down to the advanced usage section or see
-the [examples folder](https://github.com/WhiteMemory99/saucenaopie/tree/master/examples) to look at real-life examples.
+the [examples folder](https://github.com/WhiteMemory99/saucenaopie/tree/main/examples) to look at real-life examples.
 
 ## Advanced usage
 
@@ -172,7 +172,7 @@ Don't forget to handle exceptions. By the way, this leads us to the last topic -
 
 All the SauceNao exceptions are inherited from SauceNaoError, so you can use this whenever you just to catch everything.
 For other exceptions,
-see [this file](https://github.com/WhiteMemory99/saucenaopie/tree/master/saucenaopie/exceptions.py).  
+see [this file](https://github.com/WhiteMemory99/saucenaopie/tree/main/saucenaopie/exceptions.py).  
 You should also know that some exceptions contain additional helpful data:
 
 ```python
