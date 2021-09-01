@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+
+__pycache__/
+
+env/
+dist/
+*.egg-info/
+*.egglll
