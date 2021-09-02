@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from pydantic.generics import GenericModel
 
 from .sauce import BaseSauce, ArtSauce, VideoSauce, BooruSauce, MangaSauce, TwitterSauce
-from ..helper import SauceIndex
 
 GenericSauce = TypeVar("GenericSauce", BaseSauce, ArtSauce, VideoSauce, BooruSauce, MangaSauce, TwitterSauce)
 

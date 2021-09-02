@@ -15,7 +15,7 @@ class BaseSauce(BaseModel):
             return self.urls[0]
 
     @validator("author", pre=True, check_fields=False)
-    def _validate_author(cls, v: Union[list, str]) -> str:
+    def _validate_author(cls, v: Union[List[str], str]) -> str:
         if isinstance(v, list):
             return v[0]
         return v

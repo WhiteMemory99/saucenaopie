@@ -1,4 +1,4 @@
-class SauceNaoError(Exception):  # TODO: Add SauceNao message
+class SauceNaoError(Exception):
     pass
 
 

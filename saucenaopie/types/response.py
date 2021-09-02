@@ -3,7 +3,6 @@ from typing import Union, List, Type, Iterable
 from pydantic import BaseModel, validator
 
 from .result import SauceResult, GenericSauce
-from .sauce import BaseSauce
 from ..helper import SauceIndex
 
 _IndexType = Union[SauceIndex, int]

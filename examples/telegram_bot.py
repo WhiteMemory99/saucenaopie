@@ -32,7 +32,7 @@ async def get_source(message: types.Message) -> None:
         if ex.long_remaining <= 0:
             await message.answer("Sorry, the bot has reached its daily search limit.")
         else:
-            await message.answer("Sorry, the bot has reached its 30 second limit, try again in ~30 seconds.")
+            await message.answer("Sorry, the bot has reached its short limit, try again in ~30 seconds.")
     except ImageInvalid:
         await message.answer("The image is bad, couldn't get its sources.")
     except SauceNaoError:

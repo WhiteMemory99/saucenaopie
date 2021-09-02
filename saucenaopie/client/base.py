@@ -143,7 +143,7 @@ class BaseSauceClient(ABC):
                 username=data["twitter_user_handle"]
             )
         else:
-            author_id = data.get("member_id") or data.get("twitter_user_id")
+            author_id = data.get("member_id")
             if header["index_id"] in {SauceIndex.PIXIV, SauceIndex.PIXIV_HISTORICAL}:
                 author_url = f"https://www.pixiv.net/users/{author_id}"
             elif header["index_id"] == SauceIndex.NIJIE:
