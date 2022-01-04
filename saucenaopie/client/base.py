@@ -1,7 +1,6 @@
-import io
 import logging
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union
+from typing import BinaryIO, Dict, List, Optional, Union
 
 import httpx
 from pydantic import ValidationError
@@ -18,7 +17,8 @@ from ..exceptions import (
     UnknownServerError,
 )
 from ..helper import AccountType, Helper, SauceIndex
-from ..types import AccountInfo, Header, ResultIndex, SauceResponse, SauceResult
+from ..types.response import AccountInfo, Header, SauceResponse
+from ..types.result import ResultIndex, SauceResult
 from ..types.sauce import ArtSauce, BooruSauce, MangaSauce, TwitterSauce, VideoSauce
 
 log = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ class BaseSauceClient(ABC):
     @abstractmethod
     def search(
         self,
-        file: Union[str, io.BytesIO],
+        file: Union[str, BinaryIO],
         *,
         index: IndexType = SauceIndex.ALL,
         max_index: Optional[IndexType] = None,
@@ -73,6 +73,26 @@ class BaseSauceClient(ABC):
         :return: Returns SauceResponse object on success
         """
         pass
+
+    @staticmethod
+    def _prepare_params(
+        file: Union[str, BinaryIO],
+        index: IndexType,
+        result_limit: int,
+        max_index: Optional[IndexType],
+        min_index: Optional[IndexType],
+        from_url: bool,
+    ) -> Dict[str, Union[str, int]]:
+        params = {"db": index, "numres": result_limit}
+        if max_index is not None:
+            params["dbmask"] = (2 ** max_index) if max_index > 0 else 1
+        if min_index is not None:
+            params["dbmaski"] = (2 ** (min_index - 1)) if max_index > 0 else 1
+
+        if from_url and not isinstance(file, str):
+            raise AttributeError(f"The file url must be str, not {type(file).__name__}")
+
+        return params
 
     def _process_response(self, response: httpx.Response) -> SauceResponse:
         try:
@@ -197,7 +217,7 @@ class BaseSauceClient(ABC):
             elif header["index_id"] in {SauceIndex.BCY_ILLUST, SauceIndex.BCY_COSPLAY}:
                 author_url = f"https://bcy.net/u/{author_id}"
             elif header["index_id"] == SauceIndex.PORTAL_GRAPHICS:
-                author_url = f"https://web.archive.org/web/http://www.portalgraphics.net/pg/profile/?user_id={author_id}"
+                author_url = f"https://web.archive.org/web/http://www.portalgraphics.net/pg/profile/?user_id={author_id}"  # noqa
             elif header["index_id"] == SauceIndex.PAWOO:
                 author_url = urls[0]
             else:

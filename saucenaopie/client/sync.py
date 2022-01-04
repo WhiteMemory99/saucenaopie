@@ -1,10 +1,9 @@
-import io
-from typing import Optional, Union
+from typing import BinaryIO, Optional, Union
 
 import httpx
 
 from ..helper import SauceIndex
-from ..types import SauceResponse
+from ..types.response import SauceResponse
 from .base import BaseSauceClient, IndexType
 
 
@@ -14,7 +13,7 @@ class SauceNao(BaseSauceClient):
 
     def search(
         self,
-        file: Union[str, io.BytesIO],
+        file: Union[str, BinaryIO],
         *,
         index: IndexType = SauceIndex.ALL,
         max_index: Optional[IndexType] = None,
@@ -22,26 +21,19 @@ class SauceNao(BaseSauceClient):
         result_limit: int = 8,
         from_url: bool = False,
     ) -> SauceResponse:
-        params = {"db": index, "numres": result_limit}
-        if max_index is not None:
-            params["dbmask"] = (2 ** max_index) if max_index > 0 else 1
-        if min_index is not None:
-            params["dbmaski"] = (2 ** (min_index - 1)) if max_index > 0 else 1
-
-        if from_url and not isinstance(file, str):
-            raise AttributeError(f"The file url must be str, not {type(file).__name__}")
+        payload = self._prepare_params(file, index, result_limit, max_index, min_index, from_url)
 
         client: httpx.Client
         with httpx.Client(
             base_url=self.base_url, timeout=40, params=self._default_params
         ) as client:
             if from_url:
-                params["url"] = file
-                response = client.post("search.php", params=params)
-            elif isinstance(file, io.BytesIO):
-                response = client.post("search.php", params=params, files={"file": file})
-            else:
+                payload["url"] = file
+                response = client.post("search.php", params=payload)
+            elif isinstance(file, str):
                 with open(file, "rb") as f:
-                    response = client.post("search.php", params=params, files={"file": f})
+                    response = client.post("search.php", data=payload, files={"file": f})
+            else:
+                response = client.post("search.php", data=payload, files={"file": file})
 
         return self._process_response(response)

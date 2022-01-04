@@ -13,7 +13,7 @@ class Helper:
         Get a value name, mainly used to display a name to the user.
 
         :param value: Const value
-        :param human_readable: Whether to make the name human-readable or leave it untouched (default)
+        :param human_readable: Whether to make the name human-readable or leave it untouched
         :return:
         """
         for name in dir(cls):
