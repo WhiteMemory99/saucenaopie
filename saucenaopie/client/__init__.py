@@ -3,5 +3,5 @@ __all__ = [
     "AsyncSauceNao",
 ]
 
-from .sync import SauceNao
 from .asyncio import AsyncSauceNao
+from .sync import SauceNao

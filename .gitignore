@@ -1,9 +1,13 @@
+# Cache files
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+
+# Project files
 .idea/
 .vscode/
 
-__pycache__/
-
-env/
+# Build files
 dist/
 *.egg-info/
 *.egglll

@@ -18,7 +18,12 @@ class UnknownClientError(UnknownError):
 
 class LimitReached(SauceNaoError):
     def __init__(
-        self, message: str, long_remaining: int, short_remaining: int, long_limit: int, short_limit: int
+        self,
+        message: str,
+        long_remaining: int,
+        short_remaining: int,
+        long_limit: int,
+        short_limit: int,
     ) -> None:
         self.long_remaining = long_remaining
         self.short_remaining = short_remaining

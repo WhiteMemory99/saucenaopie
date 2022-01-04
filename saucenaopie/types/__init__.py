@@ -6,5 +6,5 @@ __all__ = [
     "ResultIndex",
 ]
 
-from .response import SauceResponse, Header, AccountInfo
-from .result import SauceResult, ResultIndex
+from .response import AccountInfo, Header, SauceResponse
+from .result import ResultIndex, SauceResult

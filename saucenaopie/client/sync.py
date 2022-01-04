@@ -1,10 +1,11 @@
 import io
-import httpx
 from typing import Optional, Union
 
-from .base import BaseSauceClient, IndexType
+import httpx
+
 from ..helper import SauceIndex
 from ..types import SauceResponse
+from .base import BaseSauceClient, IndexType
 
 
 class SauceNao(BaseSauceClient):
@@ -12,9 +13,14 @@ class SauceNao(BaseSauceClient):
         super().__init__(api_key, test_mode)
 
     def search(
-        self, file: Union[str, io.BytesIO], *, index: IndexType = SauceIndex.ALL,
-        max_index: Optional[IndexType] = None, min_index: Optional[IndexType] = None,
-        result_limit: int = 8, from_url: bool = False
+        self,
+        file: Union[str, io.BytesIO],
+        *,
+        index: IndexType = SauceIndex.ALL,
+        max_index: Optional[IndexType] = None,
+        min_index: Optional[IndexType] = None,
+        result_limit: int = 8,
+        from_url: bool = False,
     ) -> SauceResponse:
         params = {"db": index, "numres": result_limit}
         if max_index is not None:
@@ -26,7 +32,9 @@ class SauceNao(BaseSauceClient):
             raise AttributeError(f"The file url must be str, not {type(file).__name__}")
 
         client: httpx.Client
-        with httpx.Client(base_url=self.base_url, timeout=40, params=self._default_params) as client:
+        with httpx.Client(
+            base_url=self.base_url, timeout=40, params=self._default_params
+        ) as client:
             if from_url:
                 params["url"] = file
                 response = client.post("search.php", params=params)
@@ -34,8 +42,6 @@ class SauceNao(BaseSauceClient):
                 response = client.post("search.php", params=params, files={"file": file})
             else:
                 with open(file, "rb") as f:
-                    response = client.post(
-                        "search.php", params=params, files={"file": f}
-                    )
+                    response = client.post("search.php", params=params, files={"file": f})
 
         return self._process_response(response)

@@ -13,7 +13,7 @@ class Helper:
         Get a value name, mainly used to display a name to the user.
 
         :param value: Const value
-        :param human_readable: Whether to make the name human readable or leave it untouched (default)
+        :param human_readable: Whether to make the name human-readable or leave it untouched (default)
         :return:
         """
         for name in dir(cls):
@@ -21,7 +21,7 @@ class Helper:
                 continue
             if getattr(cls, name) == value:
                 if human_readable:
-                    return "".join(word.capitalize() for word in name.split('_'))
+                    return "".join(word.capitalize() for word in name.split("_"))
                 else:
                     return name
 
@@ -89,10 +89,23 @@ class SauceIndex(Helper):
     @classmethod
     def get_manga_indexes(cls) -> tuple:
         """Returns all manga source indexes."""
-        return cls.H_MAGAZINES, cls.DOUJINSHI_DB, cls.FAKKU, cls.N_HENTAI, cls.MADOKAMI, cls.MANGA_DEX, cls.E_HENTAI
+        return (
+            cls.H_MAGAZINES,
+            cls.DOUJINSHI_DB,
+            cls.FAKKU,
+            cls.N_HENTAI,
+            cls.MADOKAMI,
+            cls.MANGA_DEX,
+            cls.E_HENTAI,
+        )
 
     @classmethod
     def get_art_indexes(cls) -> List[int]:
         """Returns all art source indexes, like Pixiv and DeviantArt."""
-        excluded = cls.get_manga_indexes() + cls.get_booru_indexes() + cls.get_video_indexes() + (cls.TWITTER, cls.ALL)
+        excluded = (
+            cls.get_manga_indexes()
+            + cls.get_booru_indexes()
+            + cls.get_video_indexes()
+            + (cls.TWITTER, cls.ALL)
+        )
         return [value for value in cls.get_all_values() if value not in excluded]

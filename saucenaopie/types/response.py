@@ -1,9 +1,9 @@
-from typing import Union, List, Type, Iterable
+from typing import Iterable, List, Type, Union
 
 from pydantic import BaseModel, validator
 
-from .result import SauceResult, GenericSauce
 from ..helper import SauceIndex
+from .result import GenericSauce, SauceResult
 
 _IndexType = Union[SauceIndex, int]
 
@@ -46,14 +46,19 @@ class SauceResponse(BaseModel):
         return sorted(v, key=lambda r: r.similarity, reverse=True)
 
     def get_likely_results(self) -> List[SauceResult]:
-        """Returns all the results that are above the minimum similarity number for this request."""
-        return [result for result in self.results if result.similarity >= self.header.min_similarity]
+        """
+        Returns all the results that are above
+        the minimum similarity number for this request.
+        """
+        return [
+            result for result in self.results if result.similarity >= self.header.min_similarity
+        ]
 
     def get_all_source_urls(self, above_min_similarity: bool = True) -> List[str]:
         """
         Quickly returns all the source URLs that are present.
 
-        :param above_min_similarity: Only include URLs of results that are above the minimum similarity
+        :param above_min_similarity: Only include URLs of results that are above the min similarity
         """
         urls = []
         for result in self.results:
@@ -70,7 +75,7 @@ class SauceResponse(BaseModel):
         Get all results of the specified type from the results list.
 
         :param result_type: Type of sauce that is required
-        :param above_min_similarity: Only include results that are above the minimum similarity
+        :param above_min_similarity: Only include results that are above the min similarity
         :return:
         """
         required_results: List[SauceResult[result_type]] = []
@@ -83,13 +88,15 @@ class SauceResponse(BaseModel):
         return required_results
 
     def filter_results_by_index(
-        self, index: Union[Iterable[_IndexType], _IndexType], above_min_similarity: bool = True
+        self,
+        index: Union[Iterable[_IndexType], _IndexType],
+        above_min_similarity: bool = True,
     ) -> List[SauceResult]:
         """
         Get all results of the specified index(es) from the results list.
 
-        :param index: Sauce index, can pass many as an iterable.
-        :param above_min_similarity: Only include results that are above the minimum similarity
+        :param index: Sauce index, can pass many as iterable.
+        :param above_min_similarity: Only include results that are above the min similarity
         :return:
         """
         if isinstance(index, int):

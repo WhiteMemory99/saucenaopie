@@ -1,10 +1,13 @@
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
+
 from pydantic import BaseModel
 from pydantic.generics import GenericModel
 
-from .sauce import BaseSauce, ArtSauce, VideoSauce, BooruSauce, MangaSauce, TwitterSauce
+from .sauce import ArtSauce, BaseSauce, BooruSauce, MangaSauce, TwitterSauce, VideoSauce
 
-GenericSauce = TypeVar("GenericSauce", BaseSauce, ArtSauce, VideoSauce, BooruSauce, MangaSauce, TwitterSauce)
+GenericSauce = TypeVar(
+    "GenericSauce", BaseSauce, ArtSauce, VideoSauce, BooruSauce, MangaSauce, TwitterSauce
+)
 
 
 class ResultIndex(BaseModel):

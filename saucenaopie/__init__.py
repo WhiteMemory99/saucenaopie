@@ -3,6 +3,6 @@ __all__ = [
     "AsyncSauceNao",
 ]
 
-from .client import SauceNao, AsyncSauceNao
+from .client import AsyncSauceNao, SauceNao
 
-__version__ = '1.0.2'
+__version__ = "1.1.0"
