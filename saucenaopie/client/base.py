@@ -16,8 +16,9 @@ from ..exceptions import (
     UnknownClientError,
     UnknownServerError,
 )
-from ..helper import AccountType, Helper, SauceIndex
-from ..types.response import AccountInfo, Header, SauceResponse
+from ..helper import Helper, SauceIndex
+from ..types.account import AccountInfo, AccountType
+from ..types.response import Header, SauceResponse
 from ..types.result import ResultIndex, SauceResult
 from ..types.sauce import ArtSauce, BooruSauce, MangaSauce, TwitterSauce, VideoSauce
 
@@ -149,6 +150,14 @@ class BaseSauceClient(ABC):
                 except ValidationError as ex:
                     log.exception(ex)
 
+        numeric_account_type = int(header["account_type"])
+        if numeric_account_type == 0:
+            account_type = AccountType.UNREGISTERED
+        elif numeric_account_type == 1:
+            account_type = AccountType.FREE
+        else:
+            account_type = AccountType.ENHANCED
+
         return SauceResponse(
             account_info=AccountInfo(
                 user_id=header["user_id"],
@@ -156,7 +165,7 @@ class BaseSauceClient(ABC):
                 long_limit=header["long_limit"],
                 long_remaining=header["long_remaining"],
                 short_remaining=header["short_remaining"],
-                account_type=AccountType.get_value_name(int(header["account_type"])).lower(),
+                account_type=account_type,
             ),
             header=Header(
                 results_requested=header["results_requested"],

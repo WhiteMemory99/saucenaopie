@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Sequence
 
 
 class Helper:
@@ -24,14 +24,6 @@ class Helper:
                     return "".join(word.capitalize() for word in name.split("_"))
                 else:
                     return name
-
-
-class AccountType(Helper):
-    """Represents SauceNao account type."""
-
-    UNREGISTERED = 0  # No longer relevant
-    FREE = 1
-    ENHANCED = 2
 
 
 class SauceIndex(Helper):
@@ -77,17 +69,17 @@ class SauceIndex(Helper):
     ALL = 999
 
     @classmethod
-    def get_booru_indexes(cls) -> tuple:
+    def get_booru_indexes(cls) -> Sequence[int]:
         """Returns booru source indexes."""
         return cls.DANBOORU, cls.YANDERE, cls.GELBOORU, cls.KONACHAN, cls.E621
 
     @classmethod
-    def get_video_indexes(cls) -> tuple:
+    def get_video_indexes(cls) -> Sequence[int]:
         """Returns anime/video source indexes."""
         return cls.ANIME, cls.H_ANIME, cls.MOVIES, cls.SHOWS
 
     @classmethod
-    def get_manga_indexes(cls) -> tuple:
+    def get_manga_indexes(cls) -> Sequence[int]:
         """Returns all manga source indexes."""
         return (
             cls.H_MAGAZINES,
@@ -100,7 +92,7 @@ class SauceIndex(Helper):
         )
 
     @classmethod
-    def get_art_indexes(cls) -> List[int]:
+    def get_art_indexes(cls) -> Sequence[int]:
         """Returns all art source indexes, like Pixiv and DeviantArt."""
         excluded = (
             cls.get_manga_indexes()

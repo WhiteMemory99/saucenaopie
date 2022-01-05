@@ -1,4 +1,12 @@
+from enum import Enum
+
 from pydantic import BaseModel
+
+
+class AccountType(str, Enum):
+    UNREGISTERED = "unregistered"  # No longer relevant
+    FREE = "free"
+    ENHANCED = "enhanced"
 
 
 class AccountInfo(BaseModel):
@@ -8,7 +16,7 @@ class AccountInfo(BaseModel):
     """
 
     user_id: int
-    account_type: str  # unregistered / free / enhanced
+    account_type: AccountType
     short_limit: int
     long_limit: int
     long_remaining: int
