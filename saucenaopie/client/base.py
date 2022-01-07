@@ -35,13 +35,14 @@ IndexType = Union[SauceIndex, int]
 
 
 class BaseSauceClient(ABC):
-    def __init__(self, api_key: str, test_mode: bool = False) -> None:
+    def __init__(self, api_key: str, test_mode: bool = False, timeout: int = 30) -> None:
         """
         :param api_key: SauceNao API key (https://saucenao.com/user.php)
         :param test_mode: Makes the API return at least 1 result to (almost) every search
          query for testing purposes
         """
         self.base_url = "https://saucenao.com"
+        self.timeout = timeout
         self._default_params = {
             "api_key": api_key,
             "output_type": _OutputType.JSON,

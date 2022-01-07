@@ -179,7 +179,7 @@ Don't forget to handle exceptions. By the way, this leads us to the last topic -
 ## Error handling
 
 All the SauceNao exceptions are inherited from SauceNaoError, so you can use this whenever you just
-to catch everything. For other exceptions,
+want to catch everything. For other exceptions,
 see [this file](https://github.com/WhiteMemory99/saucenaopie/tree/main/saucenaopie/exceptions.py).  
 You should also know that some exceptions contain additional helpful data:
 

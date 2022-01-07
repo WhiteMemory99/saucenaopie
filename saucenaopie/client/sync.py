@@ -8,9 +8,6 @@ from .base import BaseSauceClient, IndexType
 
 
 class SauceNao(BaseSauceClient):
-    def __init__(self, api_key: str, test_mode: bool = False) -> None:
-        super().__init__(api_key, test_mode)
-
     def search(
         self,
         file: Union[str, BinaryIO],
@@ -25,7 +22,7 @@ class SauceNao(BaseSauceClient):
 
         client: httpx.Client
         with httpx.Client(
-            base_url=self.base_url, timeout=40, params=self._default_params
+            base_url=self.base_url, timeout=self.timeout, params=self._default_params
         ) as client:
             if from_url:
                 payload["url"] = file
