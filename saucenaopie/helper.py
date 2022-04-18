@@ -8,7 +8,7 @@ class Helper:
         return [getattr(cls, name) for name in dir(cls) if name.isupper()]
 
     @classmethod
-    def get_value_name(cls, value: int, human_readable: bool = False) -> Optional[str]:
+    def get_value_name(cls, value: int, human_readable: bool = False) -> str:
         """
         Get a value name, mainly used to display a name to the user.
 
@@ -25,13 +25,15 @@ class Helper:
                 else:
                     return name
 
+        return "Unknown"
+
 
 class SauceIndex(Helper):
     """Represents SauceNao database indexes."""
 
     H_MAGAZINES = 0
     H_GAME = 2
-    DOUJINSHI_DB = 3
+    DOUJINSHI_DB = 3  # Disabled
     PIXIV = 5
     PIXIV_HISTORICAL = 6
     SEIGA = 8
@@ -39,7 +41,7 @@ class SauceIndex(Helper):
     DRAWR = 10  # Site no longer functioning :(
     NIJIE = 11
     YANDERE = 12
-    SHUTTERSTOCK = 15
+    SHUTTERSTOCK = 15  # Disabled
     FAKKU = 16
     N_HENTAI = 18
     TWO_D_MARKET = 19
@@ -66,6 +68,7 @@ class SauceIndex(Helper):
     FUR_AFFINITY = 40
     TWITTER = 41
     FURRY_NETWORK = 42
+    KEMONO = 43
     ALL = 999
 
     @classmethod
