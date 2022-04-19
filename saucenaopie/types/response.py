@@ -32,11 +32,20 @@ class SauceResponse(BaseModel):
     def _sort_results(cls, v: List[SauceResult]) -> List[SauceResult]:
         return sorted(v, key=lambda r: r.similarity, reverse=True)
 
-    def get_likely_results(self) -> List[SauceResult]:
+    def get_likely_results(self, must_have_url: bool = False) -> List[SauceResult]:
         """
         Returns all the results that are above
         the minimum similarity number for this request.
+
+        :param must_have_url: Only return results that have at least one URL
         """
+        if must_have_url:
+            return [
+                result
+                for result in self.results
+                if result.data.first_url and result.similarity >= self.header.min_similarity
+            ]
+
         return [
             result for result in self.results if result.similarity >= self.header.min_similarity
         ]
