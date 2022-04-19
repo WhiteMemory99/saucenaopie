@@ -1,4 +1,5 @@
 """This example uses discord.py 2.0 beta."""
+from typing import Optional
 
 from discord import Color, Embed, Intents
 from discord.ext import commands
@@ -18,7 +19,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 sauce_nao = AsyncSauceNao(api_key=SAUCENAO_API_KEY)
 
 
-async def search_saucenao(ctx: Context, image_url: str) -> SauceResponse | None:
+async def search_saucenao(ctx: Context, image_url: str) -> Optional[SauceResponse]:
     """Send a search request to the SauceNao API and handle possible errors."""
     try:
         return await sauce_nao.search(image_url, from_url=True)
