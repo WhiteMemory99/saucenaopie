@@ -30,7 +30,7 @@ async def get_source(message: Message, bot: Bot) -> None:
     bytes_io = await bot.download(file_id)
     try:
         sauce = await sauce_nao.search(bytes_io)
-        results = sauce.get_likely_results()
+        results = sauce.get_likely_results(must_have_url=True)
         if results:
             await message.answer(
                 "\n".join(
