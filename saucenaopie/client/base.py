@@ -51,6 +51,11 @@ class BaseSauceClient(ABC):
             self._default_params["testmode"] = 1
 
     @abstractmethod
+    def close(self):
+        """Close the HTTP client."""
+        pass
+
+    @abstractmethod
     def search(
         self,
         file: Union[str, BinaryIO],
@@ -87,7 +92,7 @@ class BaseSauceClient(ABC):
     ) -> Dict[str, Union[str, int]]:
         params = {"db": index, "numres": result_limit}
         if max_index is not None:
-            params["dbmask"] = (2 ** max_index) if max_index > 0 else 1
+            params["dbmask"] = (2**max_index) if max_index > 0 else 1
         if min_index is not None:
             params["dbmaski"] = (2 ** (min_index - 1)) if max_index > 0 else 1
 

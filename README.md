@@ -59,6 +59,8 @@ def main():
     for result in sauce.results:
         print(result.data.first_url)  # Quickly get the first url from the result, can be None
         print(f"{result.index.name} - {result.similarity:.1f}%")
+        
+    client.close()  # Close the connection
 
 
 if __name__ == "__main__":
@@ -83,6 +85,8 @@ async def main():
     for result in sauce.results:
         print(result.data.first_url)  # Quickly get the first url from the result, can be None
         print(f"{result.index.name} - {result.similarity:.1f}%")
+        
+    await client.close()  # Close the connection
 
 
 if __name__ == "__main__":

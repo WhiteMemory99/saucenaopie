@@ -52,8 +52,13 @@ async def get_source(message: Message, bot: Bot) -> None:
         await message.answer("Some unexpected error has occurred while processing this picture.")
 
 
+async def on_shutdown() -> None:
+    await sauce_nao.close()
+
+
 def main() -> None:
     bot = Bot(BOT_TOKEN, parse_mode="HTML")
+    dp.shutdown.register(on_shutdown)
     dp.run_polling(bot)
 
 
