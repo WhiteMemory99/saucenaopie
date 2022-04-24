@@ -1,5 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import BinaryIO, Dict, List, Optional, Union
 
 import httpx
@@ -58,7 +59,7 @@ class BaseSauceClient(ABC):
     @abstractmethod
     def search(
         self,
-        file: Union[str, BinaryIO],
+        file: Union[str, Path, BinaryIO],
         *,
         index: IndexType = SauceIndex.ALL,
         max_index: Optional[IndexType] = None,
@@ -70,7 +71,7 @@ class BaseSauceClient(ABC):
         Perform a search with SauceNao. You can provide a file path,
         BytesIO or URL (along with the from_url argument).
 
-        :param file: File path / BytesIO / URL (with from_url=True)
+        :param file: File Path / BytesIO / URL (with from_url=True)
         :param index: SauceNao database index to search in,
          look at :class:`saucenaopie.helper.DBIndex`
         :param max_index: Search all the indexes that are less or equal to the specified one
@@ -83,21 +84,21 @@ class BaseSauceClient(ABC):
 
     @staticmethod
     def _prepare_params(
-        file: Union[str, BinaryIO],
+        file: Union[str, Path, BinaryIO],
         index: IndexType,
         result_limit: int,
         max_index: Optional[IndexType],
         min_index: Optional[IndexType],
         from_url: bool,
     ) -> Dict[str, Union[str, int]]:
+        if from_url and not isinstance(file, str):
+            raise AttributeError(f"The file url must be str, not {type(file).__name__}")
+
         params = {"db": index, "numres": result_limit}
         if max_index is not None:
             params["dbmask"] = (2**max_index) if max_index > 0 else 1
         if min_index is not None:
             params["dbmaski"] = (2 ** (min_index - 1)) if max_index > 0 else 1
-
-        if from_url and not isinstance(file, str):
-            raise AttributeError(f"The file url must be str, not {type(file).__name__}")
 
         return params
 

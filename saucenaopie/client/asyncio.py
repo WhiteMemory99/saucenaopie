@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import BinaryIO, Optional, Union
 
 import httpx
@@ -19,7 +20,7 @@ class AsyncSauceNao(BaseSauceClient):
 
     async def search(
         self,
-        file: Union[str, BinaryIO],
+        file: Union[str, Path, BinaryIO],
         *,
         index: IndexType = SauceIndex.ALL,
         max_index: Optional[IndexType] = None,
@@ -32,7 +33,7 @@ class AsyncSauceNao(BaseSauceClient):
         if from_url:
             payload["url"] = file
             response = await self._client.post("search.php", params=payload)
-        elif isinstance(file, str):
+        elif isinstance(file, (str, Path)):
             with open(file, "rb") as f:
                 response = await self._client.post("search.php", data=payload, files={"file": f})
         else:
