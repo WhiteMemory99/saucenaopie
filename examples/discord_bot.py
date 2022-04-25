@@ -1,4 +1,5 @@
 """This example uses discord.py 2.0 beta."""
+
 from typing import Optional
 
 from discord import Color, Embed, Intents

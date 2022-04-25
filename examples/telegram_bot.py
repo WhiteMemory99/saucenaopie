@@ -10,7 +10,6 @@ BOT_TOKEN = "50:TOKEN"
 SAUCENAO_API_KEY = "9201r9hhefh"
 
 dp = Dispatcher()
-sauce_nao = AsyncSauceNao(api_key=SAUCENAO_API_KEY)
 
 
 @dp.message(commands="start")
@@ -19,7 +18,7 @@ async def start_handler(message: Message) -> None:
 
 
 @dp.message(content_types={"photo", "document"})
-async def get_source(message: Message, bot: Bot) -> None:
+async def get_source(message: Message, bot: Bot, saucenao: AsyncSauceNao) -> None:
     if message.photo:
         # Choose the biggest photo
         file_id = message.photo[-1].file_id
@@ -29,7 +28,7 @@ async def get_source(message: Message, bot: Bot) -> None:
     await bot.send_chat_action(message.from_user.id, "typing")
     bytes_io = await bot.download(file_id)
     try:
-        sauce = await sauce_nao.search(bytes_io)
+        sauce = await saucenao.search(bytes_io)
         results = sauce.get_likely_results(must_have_url=True)
         if results:
             await message.answer(
@@ -52,14 +51,14 @@ async def get_source(message: Message, bot: Bot) -> None:
         await message.answer("Some unexpected error has occurred while processing this picture.")
 
 
-async def on_shutdown() -> None:
-    await sauce_nao.close()
+async def on_shutdown(saucenao: AsyncSauceNao) -> None:
+    await saucenao.close()
 
 
 def main() -> None:
     bot = Bot(BOT_TOKEN, parse_mode="HTML")
     dp.shutdown.register(on_shutdown)
-    dp.run_polling(bot)
+    dp.run_polling(bot, saucenao=AsyncSauceNao(api_key=SAUCENAO_API_KEY))
 
 
 if __name__ == "__main__":
