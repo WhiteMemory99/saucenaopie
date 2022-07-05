@@ -36,14 +36,24 @@ IndexType = Union[SauceIndex, int]
 
 
 class BaseSauceClient(ABC):
-    def __init__(self, api_key: str, test_mode: bool = False, timeout: int = 30) -> None:
+    def __init__(
+        self,
+        api_key: str,
+        test_mode: bool = False,
+        timeout: int = 30,
+        allow_partial_success: bool = False,
+    ) -> None:
         """
         :param api_key: SauceNao API key (https://saucenao.com/user.php)
         :param test_mode: Makes the API return at least 1 result to (almost) every search
          query for testing purposes
+        :param timeout: Timeout for HTTP requests
+        :param allow_partial_success: If True, SauceNaoPie will return results even if some indexes
+          failed
         """
         self.base_url = "https://saucenao.com"
         self.timeout = timeout
+        self.allow_partial_success = allow_partial_success
         self._default_params = {
             "api_key": api_key,
             "output_type": _OutputType.JSON,
@@ -146,16 +156,15 @@ class BaseSauceClient(ABC):
                 raise ImageInvalid(header["message"])
 
             raise UnknownClientError(header.get("message"))
-        if header["status"] > 0:  # Server side error
+        if header["status"] > 0 and not (data["results"] and self.allow_partial_success):
             raise UnknownServerError(header.get("message"))
 
         processed_results: List[SauceResult] = []
-        if data["results"]:
-            for result in data["results"]:
-                try:
-                    processed_results.append(self._result_to_object(result))
-                except ValidationError as ex:
-                    log.exception(ex)
+        for result in data["results"]:
+            try:
+                processed_results.append(self._result_to_object(result))
+            except ValidationError:
+                log.exception("Failed to parse result")
 
         numeric_account_type = int(header["account_type"])
         if numeric_account_type == 0:
@@ -233,7 +242,10 @@ class BaseSauceClient(ABC):
             elif header["index_id"] in {SauceIndex.BCY_ILLUST, SauceIndex.BCY_COSPLAY}:
                 author_url = f"https://bcy.net/u/{author_id}"
             elif header["index_id"] == SauceIndex.PORTAL_GRAPHICS:
-                author_url = f"https://web.archive.org/web/http://www.portalgraphics.net/pg/profile/?user_id={author_id}"  # noqa
+                author_url = (
+                    "https://web.archive.org/web/http://www.portalgraphics.net/pg"
+                    f"/profile/?user_id={author_id}"
+                )
             elif header["index_id"] == SauceIndex.PAWOO:
                 author_url = urls[0]
             else:

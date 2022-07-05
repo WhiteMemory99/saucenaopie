@@ -9,8 +9,14 @@ from .base import BaseSauceClient, IndexType
 
 
 class SauceNao(BaseSauceClient):
-    def __init__(self, api_key: str, test_mode: bool = False, timeout: int = 30) -> None:
-        super().__init__(api_key, test_mode, timeout)
+    def __init__(
+        self,
+        api_key: str,
+        test_mode: bool = False,
+        timeout: int = 30,
+        allow_partial_success: bool = False,
+    ) -> None:
+        super().__init__(api_key, test_mode, timeout, allow_partial_success)
         self._client = httpx.Client(
             base_url=self.base_url, timeout=self.timeout, params=self._default_params
         )
